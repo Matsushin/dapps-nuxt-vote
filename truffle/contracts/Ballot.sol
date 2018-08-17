@@ -146,4 +146,24 @@ contract Ballot {
     {
         winnerName_ = proposals[winningProposal()].name;
     }
+
+    // 候補者数を返す
+    function getProposalLength() public constant returns (uint) {
+        return proposals.length;
+    }
+
+    // 候補者数を返す
+    function getProposal(uint32 i) public constant returns (string) {
+        return bytes32ToStr(proposals[i].name); 
+    }
+
+     // bytes32をstringに変換する
+    function bytes32ToStr(bytes32 _bytes32) private pure returns (string) {
+
+        bytes memory bytesArray = new bytes(32);
+        for (uint256 i; i < 32; i++) {
+            bytesArray[i] = _bytes32[i];
+        }
+        return string(bytesArray);
+    }
 }

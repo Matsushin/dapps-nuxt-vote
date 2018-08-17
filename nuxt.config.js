@@ -20,7 +20,9 @@ module.exports = {
   /*
   ** Build configuration
   */
+  plugins: ['~/plugins/getWeb3.js'],
   build: {
+    vendor: ['~/plugins/getWeb3.js'],
     /*
     ** Run ESLint on save
     */
