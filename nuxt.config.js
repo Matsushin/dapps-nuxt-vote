@@ -34,6 +34,12 @@ module.exports = {
         })
       }
     }
-  }
+  },
+  css: [
+    '@/assets/scss/app.scss'
+  ],
+  modules: [
+    ['bootstrap-vue/nuxt', { css: false }]
+  ],
 }
 
