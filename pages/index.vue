@@ -1,98 +1,62 @@
 <template>
-  <section class="container">
-    <div>
-      <app-logo/>
-      <h1 class="title">
-        dapps-nuxt-vote
-      </h1>
-      <h2 class="subtitle">
-        Nuxt.js project
-      </h2>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          class="button--green">Documentation</a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey">GitHub</a>
+  <div>
+    <header>
+      <b-navbar toggleable="md" type="dark" variant="info">
+        <b-navbar-brand href="#">Dapps Nuxt Vote</b-navbar-brand>
+      </b-navbar>
+    </header>
+    <main class="container main__container">
+      <h2>候補者一覧</h2>
+      <div v-if="list.length > 0">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>候補者名</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(proposal, key, index) in list" :key="index">
+              <td>{{ proposal }}</td>
+              <td>
+                <p class="btn btn-info" @click="vote">投票する</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-    </div>
-  </section>
+      <div v-else>
+        <p class="btn btn-info" @click="getProposals">候補者を表示する</p>
+      </div>
+    </main>
+  </div>
 </template>
 
 <script>
-import AppLogo from '~/components/AppLogo.vue'
-import getWeb3 from '~/plugins/getWeb3'
-import BallotContract from '~/truffle/build/contracts/Ballot.json'
-
-const contract = require('truffle-contract')
-const ballot = contract(BallotContract)
-
 export default {
-  components: {
-    AppLogo
+  computed: {
+    list() { return this.$store.state.proposals.list }
   },
-  async asyncData ({ params }) {
-    getWeb3
-      .then(results => {
-        ballot.setProvider(results.web3.currentProvider)
-        results.web3.eth.getAccounts((error, accounts) => {
-          ballot.deployed().then((instance) => {
-            instance.getProposalLength().then((result) => {
-              const proposalCount = Number.parseInt(result)
-              for (let i = 0; i < proposalCount; ++i) {
-                instance.getProposal(i).then((result) => {
-                  console.log(result);
-                }).catch((e) => {
-                  console.log('Error getProposal')
-                  console.error(e)
-                });
-              }
-            }).catch((e) => {
-              console.log('Error getProposalLength')
-              console.error(e)
-            })
-          })
-        })
-      })
-      .catch((e) => {
-        console.log(e)
-        console.log('Error finding web3.')
-      })
-  }
+  props: {
+    name: {
+      type: String
+    }
+  },
+  methods: {
+    async vote () {
+      console.log('投票する')
+      // TODO ここでスマートコントラクトのvoteメソッドを呼び出す
+    },
+    async getProposals () {
+      await this.$store.dispatch('proposals/getProposals')
+    }
+  },
+
 }
 </script>
-
 <style>
-.container {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.title {
-  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* 1 */
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
+.main__container {
+  margin-top: 50px;
 }
 </style>
 
