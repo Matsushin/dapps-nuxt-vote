@@ -1,40 +1,36 @@
 <template>
   <div>
-    <header>
-      <b-navbar toggleable="md" type="dark" variant="info">
-        <b-navbar-brand href="#">Dapps Nuxt Vote</b-navbar-brand>
-      </b-navbar>
-    </header>
-    <main class="container main__container">
-      <h2>候補者一覧</h2>
-      <div v-if="list.length > 0">
-        <p>投票数：{{ votedCount }}</p>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>候補者名</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(proposal, key, index) in list" :key="index">
-              <td>{{ proposal }}</td>
-              <td>
-                <div v-if="votedName != ''">
-                  <p v-if="proposal == votedName" class="text-muted">投票しました</p>
-                </div>
-                <div v-else>
-                  <p class="btn btn-info" @click="vote(proposal, key)">投票する</p>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div v-else>
-        <p class="btn btn-info" @click="getProposals">候補者を表示する</p>
-      </div>
-    </main>
+    <h2>候補者一覧</h2>
+    <div v-if="list.length > 0">
+      <p>投票数：{{ votedCount }}</p>
+      <p class="pull-right">
+        <nuxt-link to="ballot/winner" class="btn btn-info">投票結果を見る</nuxt-link>
+      </p>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>候補者名</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(proposal, key, index) in list" :key="index">
+            <td>{{ proposal }}</td>
+            <td>
+              <div v-if="votedName != ''">
+                <p v-if="proposal == votedName" class="text-muted">投票しました</p>
+              </div>
+              <div v-else>
+                <p class="btn btn-info" @click="vote(proposal, key)">投票する</p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div v-else>
+      <p class="btn btn-info" @click="getProposals">候補者を表示する</p>
+    </div>
   </div>
 </template>
 
@@ -64,9 +60,4 @@ export default {
 
 }
 </script>
-<style>
-.main__container {
-  margin-top: 50px;
-}
-</style>
 

@@ -8,6 +8,7 @@ export const state = () => ({
   votedCount: 0,
   list: [],
   votedName: null,
+  winnerName: '',
 })
 
 export const mutations = {
@@ -19,7 +20,10 @@ export const mutations = {
   },
   setVotedName (state, name) {
     state.votedName = name
-  }
+  },
+  setWinnerName (state, name) {
+    state.winnerName = name
+  },
 }
 
 export const actions = {
@@ -74,6 +78,26 @@ export const actions = {
               commit('setVotedName', result)
             }).catch((e) => {
               console.log('Error getVotedName')
+              console.error(e)
+            })
+          })
+        })
+      })
+      .catch((e) => {
+        console.log(e)
+        console.log('Error finding web3.')
+      })
+  },
+  async getWinnerName ({ commit }) {
+    getWeb3
+      .then(results => {
+        ballot.setProvider(results.web3.currentProvider)
+        results.web3.eth.getAccounts((error, accounts) => {
+          ballot.deployed().then((instance) => {
+            instance.winnerName().then((name) => {
+              commit('setWinnerName', results.web3.utils.hexToAscii(name))
+            }).catch((e) => {
+              console.log('Error getWinnerName')
               console.error(e)
             })
           })
