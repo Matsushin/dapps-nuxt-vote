@@ -9,10 +9,12 @@ let getWeb3 = new Promise(function(resolve, reject) {
     // Checking if Web3 has been injected by the browser (Mist/MetaMask)
     if (typeof web3 !== 'undefined') {
       // Use Mist/MetaMask's provider.
-      //web3 = new Web3(web3.currentProvider)
-      Web3.providers.HttpProvider.prototype.sendAsync = Web3.providers.HttpProvider.prototype.send
-      var web3Provider = new Web3.providers.HttpProvider('http://127.0.0.1:7545');
-      web3 = new Web3(web3Provider);
+      web3 = new Web3(web3.currentProvider)
+
+      // Ganache
+      //Web3.providers.HttpProvider.prototype.sendAsync = Web3.providers.HttpProvider.prototype.send
+      //var web3Provider = new Web3.providers.HttpProvider('http://127.0.0.1:7545');
+      //web3 = new Web3(web3Provider);
 
       results = {
         web3: web3

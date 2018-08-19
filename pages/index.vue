@@ -48,8 +48,7 @@ export default {
   },
   methods: {
     async vote (name, index) {
-      await this.$store.commit('ballot/setVotedName', name)
-      await this.$store.dispatch('ballot/vote', index)
+      await this.$store.dispatch('ballot/vote', { name, index })
     },
     async getProposals () {
       await this.$store.dispatch('ballot/getProposals')

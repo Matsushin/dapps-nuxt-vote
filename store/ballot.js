@@ -27,7 +27,7 @@ export const mutations = {
 }
 
 export const actions = {
-  async vote ({ commit, state}, index) {
+  async vote ({ commit, state}, { name, index }) {
     getWeb3
       .then(results => {
         ballot.setProvider(results.web3.currentProvider)
@@ -35,6 +35,7 @@ export const actions = {
           ballot.deployed().then((instance) => {
             instance.vote(index, {from: accounts[0], gas: 200000 }).then((result) => {
               console.log(result)
+              commit('setVotedName', name)
             }).catch((e) => {
               console.log('Error vote')
               console.error(e)
@@ -74,7 +75,7 @@ export const actions = {
         ballot.setProvider(results.web3.currentProvider)
         results.web3.eth.getAccounts((error, accounts) => {
           ballot.deployed().then((instance) => {
-            instance.getVotedName().then((result) => {
+            instance.getVotedName({from: accounts[0]}).then((result) => {
               commit('setVotedName', result)
             }).catch((e) => {
               console.log('Error getVotedName')
@@ -95,7 +96,7 @@ export const actions = {
         results.web3.eth.getAccounts((error, accounts) => {
           ballot.deployed().then((instance) => {
             instance.winnerName().then((name) => {
-              commit('setWinnerName', results.web3.utils.hexToAscii(name))
+              commit('setWinnerName', results.web3.utils.hexToUtf8(name))
             }).catch((e) => {
               console.log('Error getWinnerName')
               console.error(e)
